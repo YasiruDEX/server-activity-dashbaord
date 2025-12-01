@@ -14,14 +14,10 @@ const wss = new WebSocket.Server({ server });
 const PORT = process.env.PORT || 3000;
 
 // Store processes and their info
-const DATA_FILE = path.join(__dirname, 'data', 'processes.json');
-const DATA_DIR = path.join(__dirname, 'data');
+const DATA_FILE = path.join(__dirname, 'processes.json');
 const LOGS_DIR = path.join(__dirname, 'logs');
 
-// Ensure directories exist
-if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-}
+// Ensure logs directory exists
 if (!fs.existsSync(LOGS_DIR)) {
     fs.mkdirSync(LOGS_DIR, { recursive: true });
 }
@@ -218,18 +214,18 @@ app.post('/api/processes', (req, res) => {
     }
 
     const processes = loadProcesses();
-  const newProcess = {
-    id: uuidv4(),
-    name,
-    command,
-    description: description || '',
-    pid: null,
-    logFile: path.join(LOGS_DIR, `${uuidv4()}.log`),
-    createdAt: new Date().toISOString()
-  };
+    const newProcess = {
+        id: uuidv4(),
+        name,
+        command,
+        description: description || '',
+        pid: null,
+        logFile: path.join(LOGS_DIR, `${uuidv4()}.log`),
+        createdAt: new Date().toISOString()
+    };
 
-  processes.push(newProcess);
-  saveProcesses(processes);    res.json({ ...newProcess, status: 'stopped' });
+    processes.push(newProcess);
+    saveProcesses(processes); res.json({ ...newProcess, status: 'stopped' });
 });
 
 // Delete a process

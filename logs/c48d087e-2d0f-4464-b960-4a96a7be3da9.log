@@ -89,3 +89,4 @@ node server.js
 [2025-12-01T05:39:07.248Z] [INFO] View counter server started on http://localhost:8085
 [2025-12-01T05:39:07.250Z] [INFO] Available endpoints: /api/flooddashboard, /api/stats, /health
 [2025-12-01T05:39:07.250Z] [INFO] Process ID: 3100795
+[2025-12-01T05:44:07.276Z] [INFO] Heartbeat - server is running | {"uptime":"300s","memoryUsage":"4MB"}
