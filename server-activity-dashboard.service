@@ -1,0 +1,16 @@
+[Unit]
+Description=Server Activity Dashboard
+After=network.target
+
+[Service]
+Type=simple
+User=yasiru
+WorkingDirectory=/home/yasiru/Documents/github/server-activity-dashbaord
+ExecStart=/usr/bin/node /home/yasiru/Documents/github/server-activity-dashbaord/server.js
+Restart=always
+RestartSec=10
+Environment=NODE_ENV=production
+Environment=PORT=3333
+
+[Install]
+WantedBy=multi-user.target

@@ -11,7 +11,7 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3333;
 
 // Store processes and their info
 const DATA_FILE = path.join(__dirname, 'processes.json');
