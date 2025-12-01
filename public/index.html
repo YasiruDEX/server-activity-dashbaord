@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Server Activity Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f5f7;
+      --bg-tertiary: #e8e8ed;
+      --bg-sidebar: #fbfbfd;
+      --text-primary: #1d1d1f;
+      --text-secondary: #6e6e73;
+      --text-tertiary: #86868b;
+      --accent-blue: #0071e3;
+      --accent-green: #34c759;
+      --accent-red: #ff3b30;
+      --accent-orange: #ff9500;
+      --accent-purple: #af52de;
+      --accent-cyan: #32ade6;
+      --border-color: rgba(0, 0, 0, 0.08);
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+      --sidebar-width: 280px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.47059;
+      -webkit-font-smoothing: antialiased;
+      letter-spacing: -0.022em;
+    }
+
+    /* Layout */
+    .app-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-color);
+      padding: 24px 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      overflow-y: auto;
+      z-index: 100;
+    }
+
+    .sidebar-header {
+      margin-bottom: 28px;
+    }
+
+    .sidebar-logo {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar-logo svg {
+      width: 28px;
+      height: 28px;
+      color: var(--accent-blue);
+    }
+
+    .sidebar-section {
+      margin-bottom: 28px;
+    }
+
+    .sidebar-section-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 12px;
+      padding: 0 4px;
+    }
+
+    /* Metric Items in Sidebar */
+    .metric-item {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+    }
+
+    .metric-item-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .metric-item-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .metric-item-label svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .metric-item-label.cpu svg { color: var(--accent-blue); }
+    .metric-item-label.memory svg { color: var(--accent-purple); }
+    .metric-item-label.temp svg { color: var(--accent-orange); }
+    .metric-item-label.uptime svg { color: var(--accent-green); }
+
+    .metric-item-value {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .metric-item-value span {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .metric-bar {
+      height: 4px;
+      background: var(--bg-tertiary);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .metric-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.5s ease;
+    }
+
+    .metric-bar-fill.cpu { background: var(--accent-blue); }
+    .metric-bar-fill.memory { background: var(--accent-purple); }
+    .metric-bar-fill.temp { background: var(--accent-orange); }
+
+    .metric-item-detail {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      margin-top: 6px;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-left: var(--sidebar-width);
+      padding: 32px 40px;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      margin-bottom: 32px;
+    }
+
+    .header h1 {
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: -0.003em;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .header p {
+      font-size: 17px;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 18px 24px;
+      text-align: center;
+      min-width: 120px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .stat-value.running { color: var(--accent-green); }
+    .stat-value.stopped { color: var(--text-tertiary); }
+    .stat-value.total { color: var(--accent-blue); }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      font-weight: 500;
+    }
+
+    /* Section Header */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* Add Process Button */
+    .add-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-blue);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 980px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .add-btn:hover {
+      background: #0077ed;
+      transform: scale(1.02);
+    }
+
+    .add-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Process List */
+    .process-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Process Card */
+    .process-card {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px 24px;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .process-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: rgba(0, 0, 0, 0.12);
+    }
+
+    .process-card.running {
+      border-left: 3px solid var(--accent-green);
+    }
+
+    .process-card.stopped {
+      border-left: 3px solid var(--text-tertiary);
+    }
+
+    .process-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .process-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .process-name {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-primary);
+    }
+
+    .status-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-tertiary);
+      flex-shrink: 0;
+    }
+
+    .status-indicator.running {
+      background: var(--accent-green);
+      box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.2);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.2); }
+      50% { box-shadow: 0 0 0 5px rgba(52, 199, 89, 0); }
+    }
+
+    .process-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .process-description {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .process-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 5px;
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .process-status.running {
+      background: rgba(52, 199, 89, 0.1);
+      color: var(--accent-green);
+    }
+
+    .process-metrics {
+      display: flex;
+      gap: 12px;
+    }
+
+    .process-metric {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      background: var(--bg-secondary);
+      padding: 3px 8px;
+      border-radius: 5px;
+    }
+
+    .process-metric svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .process-metric.cpu svg { color: var(--accent-blue); }
+    .process-metric.memory svg { color: var(--accent-purple); }
+
+    .process-actions {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .action-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: none;
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+      transform: scale(1.08);
+    }
+
+    .action-btn.start {
+      background: rgba(52, 199, 89, 0.1);
+      color: var(--accent-green);
+    }
+
+    .action-btn.start:hover {
+      background: var(--accent-green);
+      color: white;
+    }
+
+    .action-btn.stop {
+      background: rgba(255, 59, 48, 0.1);
+      color: var(--accent-red);
+    }
+
+    .action-btn.stop:hover {
+      background: var(--accent-red);
+      color: white;
+    }
+
+    .action-btn.edit:hover {
+      background: var(--accent-blue);
+      color: white;
+    }
+
+    .action-btn.delete:hover {
+      background: var(--accent-red);
+      color: white;
+    }
+
+    .action-btn.logs {
+      background: rgba(175, 82, 222, 0.1);
+      color: var(--accent-purple);
+    }
+
+    .action-btn.logs:hover {
+      background: var(--accent-purple);
+      color: white;
+    }
+
+    .action-btn svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    /* Command Display */
+    .command-display {
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-top: 14px;
+      font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+      font-size: 12px;
+      color: var(--text-secondary);
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 60px;
+      overflow-y: auto;
+      line-height: 1.5;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--bg-primary);
+      border-radius: 18px;
+      padding: 28px;
+      width: 100%;
+      max-width: 480px;
+      transform: scale(0.95) translateY(10px);
+      transition: transform 0.3s ease;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .modal-overlay.active .modal {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .modal-close {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .modal-close:hover {
+      background: var(--accent-red);
+      color: white;
+    }
+
+    /* Form */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 15px;
+      color: var(--text-primary);
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
+    }
+
+    .form-input::placeholder {
+      color: var(--text-tertiary);
+    }
+
+    textarea.form-input {
+      min-height: 90px;
+      resize: vertical;
+      font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .form-hint {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      margin-top: 5px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 24px;
+    }
+
+    .btn {
+      padding: 11px 22px;
+      border-radius: 980px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent-blue);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #0077ed;
+    }
+
+    .btn-secondary {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-tertiary);
+    }
+
+    /* Logs Modal */
+    .logs-modal .modal {
+      max-width: 720px;
+      max-height: 80vh;
+    }
+
+    .logs-container {
+      background: #1d1d1f;
+      border-radius: 10px;
+      padding: 16px;
+      height: 360px;
+      overflow: auto;
+      font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #f5f5f7;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .logs-container::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .logs-container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .logs-container::-webkit-scrollbar-thumb {
+      background: #3a3a3c;
+      border-radius: 3px;
+    }
+
+    .logs-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .logs-actions .btn {
+      flex: 1;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 56px 40px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+    }
+
+    .empty-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 18px;
+      background: var(--bg-secondary);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .empty-icon svg {
+      width: 32px;
+      height: 32px;
+      color: var(--text-tertiary);
+    }
+
+    .empty-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-primary);
+    }
+
+    .empty-description {
+      color: var(--text-secondary);
+      max-width: 320px;
+      margin: 0 auto;
+      font-size: 14px;
+    }
+
+    /* Toast Notifications */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1001;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-lg);
+      animation: slideIn 0.3s ease;
+      min-width: 260px;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .toast.success { border-left: 3px solid var(--accent-green); }
+    .toast.error { border-left: 3px solid var(--accent-red); }
+
+    .toast-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .toast.success .toast-icon { color: var(--accent-green); }
+    .toast.error .toast-icon { color: var(--accent-red); }
+
+    .toast-message {
+      flex: 1;
+      font-size: 13px;
+      color: var(--text-primary);
+    }
+
+    /* Loading spinner */
+    .spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid transparent;
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+        padding: 24px 20px;
+      }
+
+      .header h1 {
+        font-size: 28px;
+      }
+
+      .stats-bar {
+        flex-wrap: wrap;
+      }
+
+      .stat-card {
+        flex: 1;
+        min-width: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path>
+          </svg>
+          Server Activity
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">System Vitals</div>
+        
+        <div class="metric-item">
+          <div class="metric-item-header">
+            <div class="metric-item-label cpu">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+              </svg>
+              CPU
+            </div>
+            <div class="metric-item-value"><span id="cpu-value">0</span><span>%</span></div>
+          </div>
+          <div class="metric-bar">
+            <div class="metric-bar-fill cpu" id="cpu-bar" style="width: 0%"></div>
+          </div>
+          <div class="metric-item-detail"><span id="cpu-cores">0</span> cores • Load: <span id="load-avg">0.00</span></div>
+        </div>
+
+        <div class="metric-item">
+          <div class="metric-item-header">
+            <div class="metric-item-label memory">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+              </svg>
+              Memory
+            </div>
+            <div class="metric-item-value"><span id="memory-value">0</span><span>%</span></div>
+          </div>
+          <div class="metric-bar">
+            <div class="metric-bar-fill memory" id="memory-bar" style="width: 0%"></div>
+          </div>
+          <div class="metric-item-detail"><span id="memory-used">0</span> / <span id="memory-total">0</span> GB</div>
+        </div>
+
+        <div class="metric-item">
+          <div class="metric-item-header">
+            <div class="metric-item-label temp">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+              </svg>
+              Temperature
+            </div>
+            <div class="metric-item-value"><span id="temp-value">--</span><span>°C</span></div>
+          </div>
+          <div class="metric-bar">
+            <div class="metric-bar-fill temp" id="temp-bar" style="width: 0%"></div>
+          </div>
+          <div class="metric-item-detail" id="temp-status">Monitoring...</div>
+        </div>
+
+        <div class="metric-item">
+          <div class="metric-item-header">
+            <div class="metric-item-label uptime">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              Uptime
+            </div>
+          </div>
+          <div class="metric-item-value" id="uptime-value" style="font-size: 16px;">0h 0m</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="header">
+        <h1>Processes</h1>
+        <p>Manage and monitor your running processes</p>
+      </header>
+
+      <div class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-value total" id="total-count">0</div>
+          <div class="stat-label">Total</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value running" id="running-count">0</div>
+          <div class="stat-label">Running</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value stopped" id="stopped-count">0</div>
+          <div class="stat-label">Stopped</div>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <h2 class="section-title">All Processes</h2>
+        <button class="add-btn" onclick="openAddModal()">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          Add Process
+        </button>
+      </div>
+
+      <div id="process-list" class="process-list"></div>
+    </main>
+  </div>
+
+  <!-- Add/Edit Modal -->
+  <div class="modal-overlay" id="add-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-title">Add Process</h2>
+        <button class="modal-close" onclick="closeModal()">
+          <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <form id="process-form" onsubmit="handleSubmit(event)">
+        <input type="hidden" id="process-id">
+        <div class="form-group">
+          <label class="form-label" for="process-name">Name</label>
+          <input type="text" class="form-input" id="process-name" placeholder="My Process" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="process-description">Description</label>
+          <input type="text" class="form-input" id="process-description" placeholder="What does this process do?">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="process-command">Command</label>
+          <textarea class="form-input" id="process-command" placeholder="cd /path/to/project&#10;conda activate env_name&#10;python app.py" required></textarea>
+          <p class="form-hint">Enter terminal command(s). Supports multiple lines and conda.</p>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="submit-btn">Add Process</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Logs Modal -->
+  <div class="modal-overlay logs-modal" id="logs-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="logs-title">Process Logs</h2>
+        <button class="modal-close" onclick="closeLogsModal()">
+          <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="logs-container" id="logs-container">No logs available</div>
+      <div class="logs-actions">
+        <button class="btn btn-secondary" onclick="clearLogs()">Clear</button>
+        <button class="btn btn-secondary" onclick="refreshLogs()">Refresh</button>
+        <button class="btn btn-primary" onclick="closeLogsModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script>
+    let processes = [];
+    let currentLogsId = null;
+    let ws = null;
+    let metrics = {};
+
+    function initWebSocket() {
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      ws = new WebSocket(`${protocol}//${window.location.host}`);
+      
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === 'logs' && currentLogsId) {
+          const container = document.getElementById('logs-container');
+          container.textContent = data.logs || 'No logs available';
+          container.scrollTop = container.scrollHeight;
+        }
+        if (data.type === 'process-stopped') {
+          loadProcesses();
+        }
+      };
+
+      ws.onclose = () => setTimeout(initWebSocket, 3000);
+    }
+
+    function formatUptime(seconds) {
+      const days = Math.floor(seconds / 86400);
+      const hours = Math.floor((seconds % 86400) / 3600);
+      const mins = Math.floor((seconds % 3600) / 60);
+      if (days > 0) return `${days}d ${hours}h ${mins}m`;
+      return `${hours}h ${mins}m`;
+    }
+
+    async function loadMetrics() {
+      try {
+        const response = await fetch('/api/metrics');
+        metrics = await response.json();
+        updateMetricsUI();
+      } catch (error) {
+        console.error('Failed to load metrics');
+      }
+    }
+
+    function updateMetricsUI() {
+      document.getElementById('cpu-value').textContent = metrics.cpu || 0;
+      document.getElementById('cpu-bar').style.width = `${metrics.cpu || 0}%`;
+      document.getElementById('cpu-cores').textContent = metrics.cores || 0;
+      document.getElementById('load-avg').textContent = metrics.loadAvg ? metrics.loadAvg[0].toFixed(2) : '0.00';
+      
+      document.getElementById('memory-value').textContent = metrics.memory?.percent || 0;
+      document.getElementById('memory-bar').style.width = `${metrics.memory?.percent || 0}%`;
+      document.getElementById('memory-used').textContent = metrics.memory?.used || 0;
+      document.getElementById('memory-total').textContent = metrics.memory?.total || 0;
+      
+      if (metrics.temperature !== null) {
+        document.getElementById('temp-value').textContent = metrics.temperature;
+        const tempPercent = Math.min((metrics.temperature / 100) * 100, 100);
+        document.getElementById('temp-bar').style.width = `${tempPercent}%`;
+        let status = 'Normal';
+        if (metrics.temperature > 80) status = 'Critical';
+        else if (metrics.temperature > 60) status = 'Warm';
+        document.getElementById('temp-status').textContent = status;
+      } else {
+        document.getElementById('temp-value').textContent = '--';
+        document.getElementById('temp-status').textContent = 'Not available';
+      }
+      
+      document.getElementById('uptime-value').textContent = formatUptime(metrics.uptime || 0);
+    }
+
+    async function loadProcesses() {
+      try {
+        const response = await fetch('/api/processes');
+        processes = await response.json();
+        renderProcesses();
+        updateStats();
+      } catch (error) {
+        showToast('Failed to load processes', 'error');
+      }
+    }
+
+    function updateStats() {
+      const total = processes.length;
+      const running = processes.filter(p => p.status === 'running').length;
+      document.getElementById('total-count').textContent = total;
+      document.getElementById('running-count').textContent = running;
+      document.getElementById('stopped-count').textContent = total - running;
+    }
+
+    function renderProcesses() {
+      const container = document.getElementById('process-list');
+      
+      if (processes.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path>
+              </svg>
+            </div>
+            <h3 class="empty-title">No processes yet</h3>
+            <p class="empty-description">Add your first process to start monitoring.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = processes.map(proc => {
+        const procMetrics = metrics.processMetrics?.[proc.id] || { cpu: 0, memory: 0 };
+        return `
+          <div class="process-card ${proc.status}">
+            <div class="process-header">
+              <div class="process-info">
+                <div class="process-name">
+                  <span class="status-indicator ${proc.status}"></span>
+                  ${escapeHtml(proc.name)}
+                </div>
+                <div class="process-meta">
+                  ${proc.description ? `<span class="process-description">${escapeHtml(proc.description)}</span>` : ''}
+                  <span class="process-status ${proc.status}">
+                    ${proc.status === 'running' ? `PID: ${proc.pid}` : 'Stopped'}
+                  </span>
+                  ${proc.status === 'running' ? `
+                    <div class="process-metrics">
+                      <span class="process-metric cpu">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+                        </svg>
+                        ${procMetrics.cpu.toFixed(1)}%
+                      </span>
+                      <span class="process-metric memory">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                        </svg>
+                        ${procMetrics.memory.toFixed(1)}%
+                      </span>
+                    </div>
+                  ` : ''}
+                </div>
+              </div>
+              <div class="process-actions">
+                ${proc.status === 'running' ? `
+                  <button class="action-btn stop" onclick="stopProcess('${proc.id}')" title="Stop">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"></path>
+                    </svg>
+                  </button>
+                ` : `
+                  <button class="action-btn start" onclick="startProcess('${proc.id}')" title="Start">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                  </button>
+                `}
+                <button class="action-btn logs" onclick="openLogs('${proc.id}', '${escapeHtml(proc.name)}')" title="Logs">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  </svg>
+                </button>
+                <button class="action-btn edit" onclick="openEditModal('${proc.id}')" title="Edit">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                  </svg>
+                </button>
+                <button class="action-btn delete" onclick="deleteProcess('${proc.id}')" title="Delete">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="command-display">${escapeHtml(proc.command)}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function startProcess(id) {
+      const btn = event.target.closest('.action-btn');
+      btn.innerHTML = '<div class="spinner"></div>';
+      btn.disabled = true;
+      try {
+        const response = await fetch(`/api/processes/${id}/start`, { method: 'POST' });
+        const data = await response.json();
+        if (response.ok) {
+          showToast('Process started', 'success');
+        } else {
+          showToast(data.error || 'Failed to start', 'error');
+        }
+      } catch (error) {
+        showToast('Failed to start process', 'error');
+      }
+      loadProcesses();
+    }
+
+    async function stopProcess(id) {
+      const btn = event.target.closest('.action-btn');
+      btn.innerHTML = '<div class="spinner"></div>';
+      btn.disabled = true;
+      try {
+        const response = await fetch(`/api/processes/${id}/stop`, { method: 'POST' });
+        const data = await response.json();
+        if (response.ok) {
+          showToast('Process stopped', 'success');
+        } else {
+          showToast(data.error || 'Failed to stop', 'error');
+        }
+      } catch (error) {
+        showToast('Failed to stop process', 'error');
+      }
+      loadProcesses();
+    }
+
+    async function deleteProcess(id) {
+      if (!confirm('Delete this process?')) return;
+      try {
+        const response = await fetch(`/api/processes/${id}`, { method: 'DELETE' });
+        if (response.ok) {
+          showToast('Process deleted', 'success');
+          loadProcesses();
+        } else {
+          showToast('Failed to delete', 'error');
+        }
+      } catch (error) {
+        showToast('Failed to delete', 'error');
+      }
+    }
+
+    function openAddModal() {
+      document.getElementById('modal-title').textContent = 'Add Process';
+      document.getElementById('submit-btn').textContent = 'Add Process';
+      document.getElementById('process-form').reset();
+      document.getElementById('process-id').value = '';
+      document.getElementById('add-modal').classList.add('active');
+    }
+
+    function openEditModal(id) {
+      const proc = processes.find(p => p.id === id);
+      if (!proc) return;
+      document.getElementById('modal-title').textContent = 'Edit Process';
+      document.getElementById('submit-btn').textContent = 'Save Changes';
+      document.getElementById('process-id').value = proc.id;
+      document.getElementById('process-name').value = proc.name;
+      document.getElementById('process-description').value = proc.description || '';
+      document.getElementById('process-command').value = proc.command;
+      document.getElementById('add-modal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('add-modal').classList.remove('active');
+    }
+
+    async function handleSubmit(event) {
+      event.preventDefault();
+      const id = document.getElementById('process-id').value;
+      const name = document.getElementById('process-name').value;
+      const description = document.getElementById('process-description').value;
+      const command = document.getElementById('process-command').value;
+
+      try {
+        let response;
+        if (id) {
+          response = await fetch(`/api/processes/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, description, command })
+          });
+        } else {
+          response = await fetch('/api/processes', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, description, command })
+          });
+        }
+        if (response.ok) {
+          showToast(id ? 'Process updated' : 'Process added', 'success');
+          closeModal();
+          loadProcesses();
+        } else {
+          showToast('Operation failed', 'error');
+        }
+      } catch (error) {
+        showToast('Operation failed', 'error');
+      }
+    }
+
+    async function openLogs(id, name) {
+      currentLogsId = id;
+      document.getElementById('logs-title').textContent = `${name} — Logs`;
+      document.getElementById('logs-container').textContent = 'Loading...';
+      document.getElementById('logs-modal').classList.add('active');
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ type: 'watch-logs', id }));
+      }
+      await refreshLogs();
+    }
+
+    function closeLogsModal() {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ type: 'stop-watching' }));
+      }
+      currentLogsId = null;
+      document.getElementById('logs-modal').classList.remove('active');
+    }
+
+    async function refreshLogs() {
+      if (!currentLogsId) return;
+      try {
+        const response = await fetch(`/api/processes/${currentLogsId}/logs?lines=200`);
+        const data = await response.json();
+        const container = document.getElementById('logs-container');
+        container.textContent = data.logs || 'No logs available';
+        container.scrollTop = container.scrollHeight;
+      } catch (error) {
+        document.getElementById('logs-container').textContent = 'Failed to load logs';
+      }
+    }
+
+    async function clearLogs() {
+      if (!currentLogsId) return;
+      try {
+        await fetch(`/api/processes/${currentLogsId}/logs`, { method: 'DELETE' });
+        showToast('Logs cleared', 'success');
+        document.getElementById('logs-container').textContent = '';
+      } catch (error) {
+        showToast('Failed to clear logs', 'error');
+      }
+    }
+
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `
+        <svg class="toast-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          ${type === 'success' 
+            ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>'
+            : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>'
+          }
+        </svg>
+        <span class="toast-message">${escapeHtml(message)}</span>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.animation = 'slideIn 0.3s ease reverse';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    setInterval(() => {
+      loadProcesses();
+      loadMetrics();
+    }, 3000);
+
+    initWebSocket();
+    loadProcesses();
+    loadMetrics();
+  </script>
+</body>
+</html>
