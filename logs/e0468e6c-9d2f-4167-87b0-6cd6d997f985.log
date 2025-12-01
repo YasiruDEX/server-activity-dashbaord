@@ -1,0 +1,92 @@
+
+[2025-12-01T05:35:09.023Z] Starting process...
+[2025-12-01T05:35:09.023Z] Command: cd ~/Documents/github/software-project/Arbit-Backend/app
+./mvnw  spring-boot:run
+──────────────────────────────────────────────────
+[INFO] Scanning for projects...
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for com.uom:Software-design-competition:jar:0.0.1-SNAPSHOT
+[WARNING] 'dependencies.dependency.(groupId:artifactId:type:classifier)' must be unique: com.itextpdf:itextpdf:jar -> duplicate declaration of version 5.5.13.3 @ line 79, column 15
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
+[INFO] 
+[INFO] ----------------< com.uom:Software-design-competition >-----------------
+[INFO] Building Software-design-competition 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:2.7.18:run (default-cli) > test-compile @ Software-design-competition >>>
+[INFO] 
+[INFO] --- resources:3.2.0:resources (default-resources) @ Software-design-competition ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] Copying 2 resources
+[INFO] Copying 0 resource
+[INFO] 
+[INFO] --- compiler:3.10.1:compile (default-compile) @ Software-design-competition ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 93 source files to /home/yasiru/Documents/github/software-project/Arbit-Backend/app/target/classes
+[INFO] /home/yasiru/Documents/github/software-project/Arbit-Backend/app/src/main/java/com/uom/Software_design_competition/config/SecurityConfig.java: /home/yasiru/Documents/github/software-project/Arbit-Backend/app/src/main/java/com/uom/Software_design_competition/config/SecurityConfig.java uses or overrides a deprecated API.
+[INFO] /home/yasiru/Documents/github/software-project/Arbit-Backend/app/src/main/java/com/uom/Software_design_competition/config/SecurityConfig.java: Recompile with -Xlint:deprecation for details.
+[INFO] /home/yasiru/Documents/github/software-project/Arbit-Backend/app/src/main/java/com/uom/Software_design_competition/domain/util/QueryBuilder.java: /home/yasiru/Documents/github/software-project/Arbit-Backend/app/src/main/java/com/uom/Software_design_competition/domain/util/QueryBuilder.java uses unchecked or unsafe operations.
+[INFO] /home/yasiru/Documents/github/software-project/Arbit-Backend/app/src/main/java/com/uom/Software_design_competition/domain/util/QueryBuilder.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- resources:3.2.0:testResources (default-testResources) @ Software-design-competition ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] skip non existing resourceDirectory /home/yasiru/Documents/github/software-project/Arbit-Backend/app/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.10.1:testCompile (default-testCompile) @ Software-design-competition ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 1 source file to /home/yasiru/Documents/github/software-project/Arbit-Backend/app/target/test-classes
+[INFO] 
+[INFO] <<< spring-boot:2.7.18:run (default-cli) < test-compile @ Software-design-competition <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:2.7.18:run (default-cli) @ Software-design-competition ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.18)
+
+2025-12-01 11:05:15 [main] INFO  c.u.S.SoftwareDesignCompetitionApplication - Starting SoftwareDesignCompetitionApplication using Java 11.0.29 on yasiru-Predator-PH315-53 with PID 3096259 (/home/yasiru/Documents/github/software-project/Arbit-Backend/app/target/classes started by yasiru in /home/yasiru/Documents/github/software-project/Arbit-Backend/app)
+2025-12-01 11:05:15 [main] DEBUG c.u.S.SoftwareDesignCompetitionApplication - Running with Spring Boot v2.7.18, Spring v5.3.31
+2025-12-01 11:05:15 [main] INFO  c.u.S.SoftwareDesignCompetitionApplication - No active profile set, falling back to 1 default profile: "default"
+2025-12-01 11:05:15 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-01 11:05:15 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 37 ms. Found 9 JPA repository interfaces.
+2025-12-01 11:05:16 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 5509 (http)
+2025-12-01 11:05:16 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-12-01 11:05:16 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.83]
+2025-12-01 11:05:16 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-12-01 11:05:16 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 923 ms
+2025-12-01 11:05:16 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-01 11:05:16 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.6.15.Final
+2025-12-01 11:05:16 [main] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2025-12-01 11:05:16 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-12-01 11:05:16 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-12-01 11:05:16 [main] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
+2025-12-01 11:05:16 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2025-12-01 11:05:16 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-01 11:05:17 [main] DEBUG c.u.S.config.JwtRequestFilter - Filter 'jwtRequestFilter' configured for use
+2025-12-01 11:05:17 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoint(s) beneath base path '/actuator'
+2025-12-01 11:05:17 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-01 11:05:17 [main] DEBUG o.s.s.w.a.e.ExpressionBasedFilterInvocationSecurityMetadataSource - Adding web access control expression [permitAll] for Ant [pattern='/transformer-thermal-inspection/api/auth/**']
+2025-12-01 11:05:17 [main] DEBUG o.s.s.w.a.e.ExpressionBasedFilterInvocationSecurityMetadataSource - Adding web access control expression [permitAll] for Ant [pattern='/v3/api-docs/**']
+2025-12-01 11:05:17 [main] DEBUG o.s.s.w.a.e.ExpressionBasedFilterInvocationSecurityMetadataSource - Adding web access control expression [permitAll] for Ant [pattern='/swagger-ui/**']
+2025-12-01 11:05:17 [main] DEBUG o.s.s.w.a.e.ExpressionBasedFilterInvocationSecurityMetadataSource - Adding web access control expression [permitAll] for Ant [pattern='/swagger-ui.html']
+2025-12-01 11:05:17 [main] DEBUG o.s.s.w.a.e.ExpressionBasedFilterInvocationSecurityMetadataSource - Adding web access control expression [authenticated] for any request
+2025-12-01 11:05:17 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@53c21c05, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6f986031, org.springframework.security.web.context.SecurityContextPersistenceFilter@5b1cedfd, org.springframework.security.web.header.HeaderWriterFilter@49c555c3, org.springframework.web.filter.CorsFilter@38326fd5, org.springframework.security.web.authentication.logout.LogoutFilter@6d2f910b, com.uom.Software_design_competition.config.JwtRequestFilter@4f5c757c, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6334c0d8, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2318651f, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4a467ada, org.springframework.security.web.session.SessionManagementFilter@7af7c9aa, org.springframework.security.web.access.ExceptionTranslationFilter@235dacd7, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@644c3590]
+2025-12-01 11:05:17 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerAdapter - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-12-01 11:05:17 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - 67 mappings in 'requestMappingHandlerMapping'
+2025-12-01 11:05:17 [main] DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2025-12-01 11:05:17 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - ControllerAdvice beans: 3 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-12-01 11:05:17 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 5509 (http) with context path ''
+2025-12-01 11:05:17 [main] INFO  c.u.S.SoftwareDesignCompetitionApplication - Started SoftwareDesignCompetitionApplication in 2.917 seconds (JVM running for 3.104)

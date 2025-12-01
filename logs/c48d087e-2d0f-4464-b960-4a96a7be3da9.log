@@ -1,0 +1,91 @@
+
+[2025-12-01T05:25:57.398Z] Starting process...
+[2025-12-01T05:25:57.398Z] Command: cd ~/Documents/github/view-counter
+nohup node server.js > server.log 2>&1 &
+
+──────────────────────────────────────────────────
+
+[2025-12-01T05:25:57.401Z] Process exited with code: 0, signal: null
+
+[2025-12-01T05:26:27.809Z] Starting process...
+[2025-12-01T05:26:27.809Z] Command: cd ~/Documents/github/view-counter
+nohup node server.js > server.log 2>&1 &
+
+──────────────────────────────────────────────────
+
+[2025-12-01T05:26:27.812Z] Process exited with code: 0, signal: null
+
+[2025-12-01T05:27:18.602Z] Starting process...
+[2025-12-01T05:27:18.602Z] Command: cd ~/Documents/github/view-counter
+nohup node server.js > server.log 2>&1 &
+
+──────────────────────────────────────────────────
+
+[2025-12-01T05:27:18.604Z] Process exited with code: 0, signal: null
+
+[2025-12-01T05:28:35.745Z] Starting process...
+[2025-12-01T05:28:35.745Z] Command: cd ~/Documents/github/view-counter
+node server.js
+
+──────────────────────────────────────────────────
+View counter server running on http://localhost:8085
+Access /api/flooddashboard to increment view count
+Access /api/stats to see all view counts
+
+[2025-12-01T05:29:56.602Z] Process stopped by user
+
+[2025-12-01T05:33:30.003Z] Starting process...
+[2025-12-01T05:33:30.003Z] Command: cd ~/Documents/github/view-counter
+node server.js
+
+──────────────────────────────────────────────────
+[2025-12-01T05:33:30.035Z] [INFO] View counter server started on http://localhost:8085
+[2025-12-01T05:33:30.037Z] [INFO] Available endpoints: /api/flooddashboard, /api/stats, /health
+[2025-12-01T05:33:30.038Z] [INFO] Process ID: 3094369
+
+[2025-12-01T05:33:31.236Z] Process stopped by user
+[2025-12-01T05:33:31.236Z] [INFO] Received SIGTERM signal, shutting down gracefully
+[2025-12-01T05:33:31.237Z] [INFO] Closing server...
+[2025-12-01T05:33:31.238Z] [INFO] Server closed
+
+[2025-12-01T05:34:17.004Z] Starting process...
+[2025-12-01T05:34:17.004Z] Command: cd ~/Documents/github/view-counter
+node server.js
+
+──────────────────────────────────────────────────
+[2025-12-01T05:34:17.036Z] [ERROR] Server error | {"error":"listen EADDRINUSE: address already in use :::8085","code":"EADDRINUSE"}
+[2025-12-01T05:34:17.039Z] [ERROR] Port 8085 is already in use
+
+[2025-12-01T05:34:18.228Z] Starting process...
+[2025-12-01T05:34:18.228Z] Command: cd ~/Documents/github/view-counter
+node server.js
+
+──────────────────────────────────────────────────
+[2025-12-01T05:34:18.267Z] [ERROR] Server error | {"error":"listen EADDRINUSE: address already in use :::8085","code":"EADDRINUSE"}
+[2025-12-01T05:34:18.270Z] [ERROR] Port 8085 is already in use
+
+[2025-12-01T05:34:41.785Z] Starting process...
+[2025-12-01T05:34:41.785Z] Command: cd ~/Documents/github/view-counter
+node server.js
+
+──────────────────────────────────────────────────
+[2025-12-01T05:34:41.816Z] [INFO] View counter server started on http://localhost:8085
+[2025-12-01T05:34:41.819Z] [INFO] Available endpoints: /api/flooddashboard, /api/stats, /health
+[2025-12-01T05:34:41.819Z] [INFO] Process ID: 3095597
+[2025-12-01T05:34:50.483Z] [DEBUG] New connection | {"remoteAddress":"::ffff:127.0.0.1"}
+[2025-12-01T05:34:50.483Z] [DEBUG] New connection | {"remoteAddress":"::1"}
+[2025-12-01T05:34:50.577Z] [INFO] Incoming request | {"method":"GET","url":"/api/stats","clientIP":"::ffff:127.0.0.1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0.1 Safari/605.1.15"}
+[2025-12-01T05:34:50.580Z] [INFO] Request completed | {"method":"GET","url":"/api/stats","statusCode":200,"duration":"3ms","clientIP":"::ffff:127.0.0.1"}
+[2025-12-01T05:34:51.538Z] [DEBUG] New connection | {"remoteAddress":"::ffff:127.0.0.1"}
+[2025-12-01T05:34:51.539Z] [DEBUG] New connection | {"remoteAddress":"::1"}
+[2025-12-01T05:34:51.635Z] [INFO] Incoming request | {"method":"GET","url":"/api/stats","clientIP":"::ffff:127.0.0.1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0.1 Safari/605.1.15"}
+[2025-12-01T05:34:51.636Z] [INFO] Request completed | {"method":"GET","url":"/api/stats","statusCode":200,"duration":"1ms","clientIP":"::ffff:127.0.0.1"}
+
+[2025-12-01T05:39:07.214Z] Starting process...
+[2025-12-01T05:39:07.214Z] Command: cd ~/Documents/github/view-counter
+node server.js
+
+──────────────────────────────────────────────────
+[2025-12-01T05:39:07.248Z] [INFO] View counter server started on http://localhost:8085
+[2025-12-01T05:39:07.250Z] [INFO] Available endpoints: /api/flooddashboard, /api/stats, /health
+[2025-12-01T05:39:07.250Z] [INFO] Process ID: 3100795

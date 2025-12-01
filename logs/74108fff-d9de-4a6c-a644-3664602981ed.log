@@ -1,0 +1,80 @@
+
+[2025-12-01T05:36:54.802Z] Starting process...
+[2025-12-01T05:36:54.802Z] Command: cd ~/Documents/github/software-project/Arbit-Transformer-Analysis
+conda activate thermal_env
+python api.py
+──────────────────────────────────────────────────
+
+CondaError: Run 'conda init' before 'conda activate'
+
+Traceback (most recent call last):
+  File "/home/yasiru/Documents/github/software-project/Arbit-Transformer-Analysis/api.py", line 21, in <module>
+    from fastapi import FastAPI, File, UploadFile, Form, HTTPException
+ModuleNotFoundError: No module named 'fastapi'
+
+[2025-12-01T05:37:16.410Z] Starting process...
+[2025-12-01T05:37:16.410Z] Command: cd ~/Documents/github/software-project/Arbit-Transformer-Analysis
+conda init
+conda activate thermal_env
+python api.py
+──────────────────────────────────────────────────
+no change     /home/yasiru/miniconda3/condabin/conda
+no change     /home/yasiru/miniconda3/bin/conda
+no change     /home/yasiru/miniconda3/bin/conda-env
+no change     /home/yasiru/miniconda3/bin/activate
+no change     /home/yasiru/miniconda3/bin/deactivate
+no change     /home/yasiru/miniconda3/etc/profile.d/conda.sh
+no change     /home/yasiru/miniconda3/etc/fish/conf.d/conda.fish
+no change     /home/yasiru/miniconda3/shell/condabin/Conda.psm1
+no change     /home/yasiru/miniconda3/shell/condabin/conda-hook.ps1
+no change     /home/yasiru/miniconda3/lib/python3.13/site-packages/xontrib/conda.xsh
+no change     /home/yasiru/miniconda3/etc/profile.d/conda.csh
+no change     /home/yasiru/.bashrc
+No action taken.
+
+CondaError: Run 'conda init' before 'conda activate'
+
+Traceback (most recent call last):
+  File "/home/yasiru/Documents/github/software-project/Arbit-Transformer-Analysis/api.py", line 21, in <module>
+    from fastapi import FastAPI, File, UploadFile, Form, HTTPException
+ModuleNotFoundError: No module named 'fastapi'
+
+[2025-12-01T05:38:44.158Z] Starting process...
+[2025-12-01T05:38:44.158Z] Command: cd ~/Documents/github/software-project/Arbit-Transformer-Analysis
+conda init
+conda activate thermal_env
+python api.py
+──────────────────────────────────────────────────
+no change     /home/yasiru/miniconda3/condabin/conda
+no change     /home/yasiru/miniconda3/bin/conda
+no change     /home/yasiru/miniconda3/bin/conda-env
+no change     /home/yasiru/miniconda3/bin/activate
+no change     /home/yasiru/miniconda3/bin/deactivate
+no change     /home/yasiru/miniconda3/etc/profile.d/conda.sh
+no change     /home/yasiru/miniconda3/etc/fish/conf.d/conda.fish
+no change     /home/yasiru/miniconda3/shell/condabin/Conda.psm1
+no change     /home/yasiru/miniconda3/shell/condabin/conda-hook.ps1
+no change     /home/yasiru/miniconda3/lib/python3.13/site-packages/xontrib/conda.xsh
+no change     /home/yasiru/miniconda3/etc/profile.d/conda.csh
+no change     /home/yasiru/.bashrc
+No action taken.
+/home/yasiru/Documents/github/software-project/Arbit-Transformer-Analysis/api.py:487: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+2025-12-01 11:08:48,077 - __main__ - INFO - Starting Thermal Anomaly Detection API server on port 8000...
+INFO:     Started server process [3100416]
+INFO:     Waiting for application startup.
+2025-12-01 11:08:48,092 - __main__ - INFO - Starting Thermal Anomaly Detection API...
+2025-12-01 11:08:48,096 - __main__ - INFO - Configuration loaded from config.yaml
+/home/yasiru/.local/lib/python3.10/site-packages/torch/cuda/__init__.py:174: UserWarning: CUDA initialization: CUDA unknown error - this may be due to an incorrectly set up environment, e.g. changing env variable CUDA_VISIBLE_DEVICES after program start. Setting the available devices to be zero. (Triggered internally at /pytorch/c10/cuda/CUDAFunctions.cpp:109.)
+  return torch._C._cuda_getDeviceCount() > 0
+2025-12-01 11:08:48,101 - __main__ - INFO - Using device: cpu
+2025-12-01 11:08:48,137 - __main__ - INFO - ✓ ML model loaded successfully
+2025-12-01 11:08:48,137 - __main__ - INFO - ✓ Thermal detector initialized
+2025-12-01 11:08:48,137 - __main__ - INFO - API ready!
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)

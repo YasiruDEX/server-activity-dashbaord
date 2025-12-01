@@ -1,0 +1,31 @@
+{
+  "processes": [
+    {
+      "id": "4c624356-2145-4ccf-a605-cbe7d00571b9",
+      "name": "Flood View counter",
+      "command": "cd ~/Documents/github/view-counter\nnode server.js\n",
+      "description": "",
+      "pid": 3100794,
+      "logFile": "/home/yasiru/Documents/github/server-activity-dashbaord/logs/c48d087e-2d0f-4464-b960-4a96a7be3da9.log",
+      "createdAt": "2025-12-01T05:25:44.602Z"
+    },
+    {
+      "id": "0120ee94-b4ac-46a0-a571-945133770b14",
+      "name": "Arbit Backend",
+      "command": "cd ~/Documents/github/software-project/Arbit-Backend/app\n./mvnw  spring-boot:run",
+      "description": "",
+      "pid": 3096012,
+      "logFile": "/home/yasiru/Documents/github/server-activity-dashbaord/logs/e0468e6c-9d2f-4167-87b0-6cd6d997f985.log",
+      "createdAt": "2025-12-01T05:33:26.625Z"
+    },
+    {
+      "id": "e3942ade-9e78-4c6d-9e25-5df7321edb02",
+      "name": "Arbit ML",
+      "command": "cd ~/Documents/github/software-project/Arbit-Transformer-Analysis\nconda activate thermal_env\npython api.py",
+      "description": "",
+      "pid": 3100416,
+      "logFile": "/home/yasiru/Documents/github/server-activity-dashbaord/logs/74108fff-d9de-4a6c-a644-3664602981ed.log",
+      "createdAt": "2025-12-01T05:36:53.152Z"
+    }
+  ]
+}
