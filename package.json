@@ -1,15 +1,15 @@
 {
-  "name": "server-activity-dashboard",
-  "version": "1.0.0",
-  "description": "A clean Apple-style dashboard for monitoring and managing nohup processes",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
-  },
-  "dependencies": {
-    "express": "^4.18.2",
-    "ws": "^8.14.2",
-    "uuid": "^9.0.0"
-  }
+    "name": "server-activity-dashboard",
+    "version": "1.0.0",
+    "description": "A clean Apple-style dashboard for monitoring and managing nohup processes",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js",
+        "dev": "node server.js"
+    },
+    "dependencies": {
+        "express": "^4.18.2",
+        "ws": "^8.14.2",
+        "uuid": "^9.0.0"
+    }
 }
